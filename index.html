@@ -1,0 +1,120 @@
+<!-- 
+    E/18/285
+    Ranasinghe S.M.T.S.C.
+    CO528 -Applied Software Architecture
+    Assignment 2
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Angle Selector</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <p><strong>Name:</strong> Ranasinghe S.M.T.S.C.</p>
+        <p><strong>Registration Number:</strong> E/18/285</p>
+        <p><strong>Subject:</strong> CO528 - Applied Software Architecture</p>
+      </div>
+
+      <h2>Angle Selector Sync Application</h2>
+
+      <div class="input-group">
+        <label for="valueInput">Insert angle value (0 - 360)</label>
+        <input type="number" id="valueInput" value="0" min="0" max="360" />
+      </div>
+
+      <div class="slider-container">
+        <input type="range" id="valueSlider" min="0" max="360" value="180" />
+      </div>
+
+      <div class="radio-buttons">
+        <label>
+          <input type="radio" id="radio0" name="preset" value="0" />
+          0
+        </label>
+
+        <label>
+          <input type="radio" id="radio45" name="preset" value="45" />
+          45
+        </label>
+
+        <label>
+          <input type="radio" id="radio60" name="preset" value="60" />
+          60
+        </label>
+
+        <label>
+          <input type="radio" id="radio90" name="preset" value="90" />
+          90
+        </label>
+
+        <label>
+          <input type="radio" id="radio180" name="preset" value="180" />
+          180
+        </label>
+      </div>
+
+      <div class="card">
+        <p><strong>Note</strong></p>
+        <p>
+          If you enter greater than 360 or less than 0, it will automatically
+          map to an angle between 0 and 360.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const valueInput = document.getElementById("valueInput");
+      const valueSlider = document.getElementById("valueSlider");
+      const radioButtons = document.querySelectorAll('input[name="preset"]');
+
+      function updateSliderAndRadioButtons(value) {
+        // Map the value into the range of 0 to 360 using modulo
+        value = value % 360;
+
+        // If value is negative (e.g., -30), adjust it to be within 0-360
+        if (value < 0) {
+          value += 360;
+        }
+
+        valueInput.value = value;
+
+        valueSlider.value = value;
+        valueSlider.style.background = `linear-gradient(to right, #007BFF ${
+          (value / 360) * 100
+        }%, #ddd ${(value / 360) * 100}%)`;
+
+        radioButtons.forEach((radio) => {
+          radio.checked = parseInt(radio.value) === value;
+        });
+      }
+
+      valueInput.addEventListener("input", (e) => {
+        const value = parseInt(e.target.value);
+        updateSliderAndRadioButtons(value);
+      });
+
+      valueSlider.addEventListener("input", (e) => {
+        const value = parseInt(e.target.value);
+        valueInput.value = value;
+        updateSliderAndRadioButtons(value);
+      });
+
+      radioButtons.forEach((radio) => {
+        radio.addEventListener("change", (e) => {
+          const value = parseInt(e.target.value);
+          valueInput.value = value;
+          updateSliderAndRadioButtons(value);
+        });
+      });
+
+      // Initialize the controls with the default value
+      updateSliderAndRadioButtons(0);
+    </script>
+  </body>
+</html>
